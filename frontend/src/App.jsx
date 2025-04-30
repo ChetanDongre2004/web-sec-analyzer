@@ -47,7 +47,13 @@ function App() {
             <ScanResults 
               scanId={scanState.scanId} 
               targetUrl={scanState.targetUrl} 
-              onNewScan={handleNewScan} 
+              onNewScan={() => {
+                setScanState({
+                  scanId: null,
+                  targetUrl: null,
+                  showResults: false,
+                });
+              }} 
             />
           )}
 
@@ -58,7 +64,7 @@ function App() {
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Web Security Analyzer - A demonstration project</p>
+          <p>© {new Date().getFullYear()} Web Security Analyzer - Developed by <a href='https://www.linkedin.com/in/bhushan-madankar/' target='_blank' rel='noopener noreferrer'>Bhushan Madankar</a></p>
         </footer>
       </div>
     </div>

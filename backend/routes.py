@@ -7,7 +7,7 @@ This module defines the Flask API endpoints for the application.
 from flask import Blueprint, request, jsonify
 import logging
 
-from scanner import run_scan
+from scanner import run_scan, run_scan_with_progress, get_progress
 from utils import (
     generate_scan_id, 
     get_scan_status, 
@@ -53,8 +53,8 @@ def start_scan():
         # Generate a unique scan ID
         scan_id = generate_scan_id()
         
-        # Start the scan in a separate thread
-        start_scan_thread(scan_id, url, run_scan)
+        # Start the scan in a separate thread with progress tracking
+        start_scan_thread(scan_id, url, lambda url: run_scan_with_progress(scan_id, url))
         
         return jsonify({
             'status': 'success',
@@ -67,6 +67,35 @@ def start_scan():
         return jsonify({
             'status': 'error',
             'message': f'Failed to start scan: {str(e)}'
+        }), 500
+
+@api.route('/scan/<scan_id>/progress', methods=['GET'])
+def get_scan_progress(scan_id):
+    """
+    Get the progress of a scan.
+    
+    Returns JSON with scan progress percentage and status.
+    """
+    try:
+        progress_info = get_progress(scan_id)
+        
+        if not progress_info:
+            return jsonify({
+                'status': 'error',
+                'message': 'Scan ID not found or no progress information available'
+            }), 404
+            
+        return jsonify({
+            'status': 'success',
+            'progress': progress_info.get('progress', 0),
+            'scan_status': progress_info.get('status', 'pending')
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error retrieving scan progress: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Failed to retrieve scan progress: {str(e)}'
         }), 500
 
 @api.route('/scan/<scan_id>', methods=['GET'])

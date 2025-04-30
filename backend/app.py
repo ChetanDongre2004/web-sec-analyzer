@@ -6,9 +6,9 @@ This module initializes the Flask application and registers API routes.
 
 import os
 from flask import Flask, jsonify
-from flask_cors import CORS
 import logging
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,8 +26,8 @@ def create_app():
     """
     app = Flask(__name__)
     
-    # Enable CORS for all routes
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    # Enable CORS for the Flask app
+    CORS(app)
     
     # Register the API routes
     # Use an absolute import instead of relative import
@@ -66,6 +66,11 @@ def create_app():
             'status': 'error',
             'message': 'Internal server error'
         }), 500
+
+    # Ensure error messages do not expose sensitive information
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        return {"error": "An unexpected error occurred."}, 500
         
     return app
 

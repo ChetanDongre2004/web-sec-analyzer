@@ -162,3 +162,10 @@ def serialize_scan_result(scan_result):
     # Create a deep copy of the result
     serialized = json.loads(json.dumps(scan_result, default=lambda o: str(o)))
     return serialized
+
+def clear_scan_data(scan_id):
+    """Clear scan data for a given scan ID."""
+    if scan_id in SCAN_HISTORY:
+        del SCAN_HISTORY[scan_id]
+    if scan_id in ACTIVE_SCANS:
+        del ACTIVE_SCANS[scan_id]
