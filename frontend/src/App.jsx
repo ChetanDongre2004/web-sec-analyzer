@@ -64,7 +64,7 @@ function App() {
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Web Security Analyzer - Developed by <a href='https://www.linkedin.com/in/bhushan-madankar/' target='_blank' rel='noopener noreferrer'>Bhushan Madankar</a></p>
+          <p>© {new Date().getFullYear()} Web Security Analyzer - Developed by <a href='https://www.linkedin.com/in/chetan-dongre-cs/' target='_blank' rel='noopener noreferrer'>Chetan Dongre</a></p>
         </footer>
       </div>
     </div>
